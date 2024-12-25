@@ -17,6 +17,11 @@ public class CustomerController {
     @Autowired
     private ICustomerService customerService;
 
+    @ExceptionHandler(DuplicateEmailException.class)
+    public String handleDuplicateEmailException(Model model, DuplicateEmailException e) {
+        return "redirect:/customers/input-not-acceptable";
+    }
+
     @GetMapping
     public String listCustomers(Model model) {
         model.addAttribute("customers", customerService.findAll());
@@ -30,14 +35,10 @@ public class CustomerController {
     }
 
     @PostMapping("/save")
-    public String saveCustomer(@ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes) {
-        try {
-            customerService.save(customer);
-            redirectAttributes.addFlashAttribute("message", "New customer successfully added");
-            return "redirect:/customers";
-        } catch (DuplicateEmailException e) {
-            return "redirect:/customers/input-not-acceptable";
-        }
+    public String saveCustomer(@ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes) throws DuplicateEmailException {
+        customerService.save(customer);
+        redirectAttributes.addFlashAttribute("message", "New customer successfully added");
+        return "redirect:/customers";
     }
 
     @GetMapping("/{id}/update")
@@ -53,14 +54,10 @@ public class CustomerController {
     }
 
     @PostMapping("/update")
-    public String updateCustomer(@ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes) {
-        try {
-            customerService.save(customer);
-            redirectAttributes.addFlashAttribute("message", "Customer successfully updated");
-            return "redirect:/customers";
-        } catch (DuplicateEmailException e) {
-            return "redirect:/customers/input-not-acceptable";
-        }
+    public String updateCustomer(@ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes) throws DuplicateEmailException {
+        customerService.save(customer);
+        redirectAttributes.addFlashAttribute("message", "Customer successfully updated");
+        return "redirect:/customers";
     }
 
     @GetMapping("/{id}/delete")
