@@ -36,7 +36,7 @@ public class CustomerController {
             redirectAttributes.addFlashAttribute("message", "New customer successfully added");
             return "redirect:/customers";
         } catch (DuplicateEmailException e) {
-            return "redirect:/input-not-acceptable";
+            return "redirect:/customers/input-not-acceptable";
         }
     }
 
@@ -59,7 +59,7 @@ public class CustomerController {
             redirectAttributes.addFlashAttribute("message", "Customer successfully updated");
             return "redirect:/customers";
         } catch (DuplicateEmailException e) {
-            return "redirect:/input-not-acceptable";
+            return "redirect:/customers/input-not-acceptable";
         }
     }
 
@@ -73,5 +73,10 @@ public class CustomerController {
             redirectAttributes.addFlashAttribute("message", "Customer not found");
         }
         return "redirect:/customers";
+    }
+
+    @GetMapping("/input-not-acceptable")
+    public String showInputNotAcceptable() {
+        return "input-not-acceptable";
     }
 }
